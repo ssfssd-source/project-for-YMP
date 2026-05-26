@@ -35,3 +35,10 @@ def auto_decrypt(text:str):
 
     res.sort(key=lambda x: x[1])
     return print(f'Закодированное слово: "{ceasar_ciper(text, -res[0][0])}". Было закодировано со сдвигом = {res[0][0]}')
+
+"Обработчик исключений для сдвига"
+def get_int(prompt):
+    while True:
+        try: return int(input(prompt))
+        except ValueError: print("Ошибка: вводите целое число!")
+

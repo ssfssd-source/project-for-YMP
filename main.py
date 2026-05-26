@@ -7,7 +7,7 @@ RU_REF_FREQS = {
 }
 RU_ALPHABET = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 
-def caesar_cipher(text, shift):
+def caesar_cipher(text:str, shift:int):
     """Шифрование и расшифрование (для дешифровки передаем отрицательный shift)"""
     res = []
     for c in text:
@@ -18,7 +18,7 @@ def caesar_cipher(text, shift):
             res.append(c)
     return "".join(res)
 
-def auto_decrypt(text):
+def auto_decrypt(text:str):
     """Взлом частотным анализом по метрике наименьших квадратов"""
     chars = [c.lower() for c in text if c.lower() in RU_ALPHABET]
     if not chars: 

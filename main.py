@@ -18,7 +18,7 @@ def caesar_cipher(text:str, shift:int):
             res.append(c)
     return "".join(res)
 
-def auto_decrypt(text:str):
+def auto_decrypt(text:str) -> str:
     """Взлом частотным анализом по метрике наименьших квадратов"""
     chars = [c.lower() for c in text if c.lower() in RU_ALPHABET]
     if not chars: 

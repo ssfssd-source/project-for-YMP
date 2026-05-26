@@ -1,15 +1,37 @@
 "Проект для 'ЯМП'а: компактный кодировщик шифра цезаря"
+"Словарь, где ключ - это буква, а значение - средняя частота использования на 100 символов"
+RU_REF_FREQS = {
+    'о': 10.97, 'е': 8.45, 'а': 8.01, 'и': 7.35, 'н': 6.70, 'т': 6.26, 'с': 5.47, 
+    'р': 4.73, 'в': 4.54, 'л': 4.40, 'к': 3.49, 'м': 3.21, 'д': 2.98, 'п': 2.81, 
+    'у': 2.62, 'я': 2.01, 'ы': 1.90, 'ь': 1.74, 'г': 1.70, 'з': 1.65, 'б': 1.59, 
+    'ч': 1.44, 'й': 1.21, 'х': 0.97, 'ж': 0.94, 'ш': 0.73, 'ю': 0.64, 'ц': 0.48, 
+    'щ': 0.36, 'э': 0.32, 'ф': 0.26, 'ъ': 0.04, 'ё': 0.04
+}
 
-ru_alphabet ="абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+RU_ALPHABET ="абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 def ceasar_ciper(text:str, shift:int):
     "Шифрование и расшифрование(для дешифровки передаем открицательный shift)"
     res=[]
     for c in text:
-        if c.lower() in ru_alphabet:
-            idx = (ru_alphabet.index(c.lower()) + shift) % 33
-            res.append(ru_alphabet[idx])
+        if c.lower() in RU_ALPHABET:
+            idx = (RU_ALPHABET.index(c.lower()) + shift) % 33
+            res.append(RU_ALPHABET[idx])
         else:
             res.append(c)
     return "".join(res)
 
-print(ceasar_ciper("воздухан", 5))
+def auto_decrypt(text:str):
+    "Взлом частотным анализом по метрике наименьших квадратов"
+    chars = [c.lower() for c in text if c.lower() in RU_ALPHABET]
+    if not chars:
+        return None
+    
+    freqs = {c: (chars.count(c)/len(chars))*100 for c in RU_ALPHABET}
+
+    res =[]
+    for s in range(33):
+        dev = sum((freqs[RU_ALPHABET[i]] - RU_REF_FREQS[RU_ALPHABET[(i - s) % 33]])**2 for i in range(33))
+        res.append((s,dev))
+
+    res.sort(key=lambda x: x[1])
+    return print(f'Закодированное слово: "{ceasar_ciper(text, -res[0][0])}". Было закодировано со сдвигом = {res[0][0]}')
